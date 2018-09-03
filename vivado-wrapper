@@ -128,7 +128,9 @@ function get_constraint_of_module () {
 function vivado_check_and_init_template () {
     [[ -z "$board" ]] && echo "You must set variable 'board'. Try \`vivadow init\` again." && return 4
     [[ -d "$my_path/template/$board" ]] && return 0
+    echo "Initializing Project"
     "$my_path/gen_tcl.sh" init-project temp_project "$my_path/template/$board" "$board" > $temp_dir/sh.tcl
+    echo "Generating Base Project"
     "$vivado_exec" -mode batch -source "$temp_dir/sh.tcl" -nojournal -nolog
     rm "$my_path/template/$board/temp_project.srcs/constrs_1/new/constraint.xdc"
     rm -rf "$my_path/template/$board/temp_project.cache/"*
@@ -141,6 +143,7 @@ function generate_real_project () {
     ln -s "$temp_dir/$board" "$temp_dir/project"
 
     # Convert vwc constraints to xdc here
+    echo "Converting VWC Constraints to XDC"
     [[ "$constr_path" == '' ]] && constr_path="$(pwd)/$(get_constraint_of_module $top_module)"
     [[ ${constr_path: -4} == ".vwc" ]] && "$my_path/vwc2xdc.sh" "$constr_path" > "$temp_dir/generated.xdc" && constr_path="$temp_dir/generated.xdc"
 
