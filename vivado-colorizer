@@ -1,4 +1,5 @@
 #!/bin/bash
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 norm="$(printf '\033[0m')" #returns to "normal"
 stage="$(printf '\033[0;4;34m')" # blink
@@ -7,28 +8,23 @@ warning="$(printf '\033[0;35m')" # underlined light yellow
 crit="$(printf '\033[0;4;35m')" # blink light yellow
 error="$(printf '\033[0;1;31m')" # bold light red
 
-$DIR/vivado-wrapper $@ \
-| sed -u -e "s/INFO/${info}&${norm}/g"\
+$DIR/vivado-wrapper $@ | sed -u -e "s/INFO/${info}&${norm}/g"\
+| sed -u -e "s/CRITICAL WARNING/${cirt}&${norm}/g"\
 | sed -u -e "s/WARNING/${warning}&${norm}/g"\
 | sed -u -e "s/ERROR/${error}&${norm}/g"\
 | sed -u -e "s/Scanning sources/${stage}&${norm}/g"\
-| sed -u -e "s/Starting RTL ElaborationFinished RTL Optimization Phase/${stage}&${norm}/g"\
-| sed -u -e "s/Processing XDC ConstraintsReport RTL Partitions/${stage}&${norm}/g"\
-| sed -u -e "s/Starting Cross Boundary OptimizationFinished Parallel Reinference/${stage}&${norm}/g"\
-| sed -u -e "s/Start Area OptimizationStart Timing Optimization/${stage}&${norm}/g"\
-| sed -u -e "s/Start Technology MappingStart IO Insertion/${stage}&${norm}/g"\
-| sed -u -e "s/Start Final Netlist CleanupStart Renaming Generated Instances/${stage}&${norm}/g"\
-| sed -u -e "s/Start Rebuilding User HierarchyStarting Logic Optimization Task/${stage}&${norm}/g"\
-| sed -u -e "s/Phase 1 RetargetPhase 2 Constant Propagation/${stage}&${norm}/g"\
-| sed -u -e "s/Phase 3 Sweep/${stage}&${norm}/g"\
-| sed -u -e "s/Connectivity Check TaskPower Optimization Task/${stage}&${norm}/g"\
-| sed -u -e "s/Writing palcer database/${stage}&${norm}/g"\
-| sed -u -e "s/Writing XDEFStarting Placer Task/${stage}&${norm}/g"\
-| sed -u -e "s/Phase 1 Placer Runtime EstimatorPhase 2 Placer Initialization/${stage}&${norm}/g"\
-| sed -u -e "s/Phase 3 Global PlacementPhase 4 Detail Placement/${stage}&${norm}/g"\
-| sed -u -e "s/Phase 5 Post Placement Optimization and Clean-UpPhase 6 Post Commit Optimization/${stage}&${norm}/g"\
 | sed -u -e "s/Creating bitstream/${stage}&${norm}/g"\
-| sed -u -e "s/CRITICAL/${cirt}&${norm}/g"\
 | sed -u -e "s/Generating Base Project/${stage}&${norm}/g"\
 | sed -u -e "s/Converting VWC Constraints to XDC/${stage}&${norm}/g"\
-| sed -u -e "s/Initializing Project/${stage}&${norm}/g"
+| sed -u -e "s/Initializing Project/${stage}&${norm}/g" \
+| sed -u -e "s/Loading data files/${stage}&${norm}/g" \
+| sed -u -e "s/Loading site data/${stage}&${norm}/g" \
+| sed -u -e "s/Loading route data/${stage}&${norm}/g" \
+| sed -u -e "s/Processing options/${stage}&${norm}/g" \
+| sed -u -e "s/Creating bitmap/${stage}&${norm}/g" \
+| sed -u -e "s/Writing bitstream/${stage}&${norm}/g" \
+| sed -u -e "s/Bitgen Completed Successfully/${stage}&${norm}/g" \
+| sed -u -e "s/Starting Routing Task/${stage}&${norm}/g" \
+| sed -u -e "s/Running DRC/${stage}&${norm}/g" \
+| sed -u -e "s/Phase [0-9][0-9]*\(\.[0-9]\)* .*/${stage}&${norm}/g"
+
